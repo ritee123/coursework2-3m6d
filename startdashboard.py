@@ -10,8 +10,8 @@ def dashboard():
     def admin_page():
         '''Destroys the tkinter window and call open function i.e. login function from a admin page'''
         WIN.destroy()
-        from dashboard import adminlogin as adminlogin
-        adminlogin()
+        from dashboard import dashboard
+        dashboard()
 
     # Set background image
     background = PhotoImage(file="images/DaBank.png")
@@ -29,16 +29,14 @@ def dashboard():
     # Function to proceed to the user page
     def user_page():
         WIN.destroy()
-        from Login_as_user import dashboard as open_register
-        open_register()
+        from Login_as_user import userlogin
+        userlogin()
 
-    # Create the 'Get Started' button
     get_started_button = Button(WIN, text="Get Started", padx=15, borderwidth=0,
                                 font=("Comic Sans MS", 16), background='#645394',
                                 foreground='white', command=admin_page)
     get_started_button.place(relx=0.5, rely=0.75, anchor=CENTER)
 
-    # Bind mouse events to the 'Get Started' button
     
     get_started_button.bind('<Enter>', on_enter_get_started)
     get_started_button.bind('<Leave>', on_leave_get_started)

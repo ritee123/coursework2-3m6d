@@ -5,7 +5,7 @@ from tkinter import *
 def dashboard_call(WIN):
     '''Destroys the tkinter window and call open function i.e. login function from a admin page'''
     WIN.destroy()
-    from dashboard import dashboard as dashboard
+    from dashboard import dashboard
     dashboard()
 
 
@@ -42,8 +42,8 @@ def homepage():
     def user_list_page():
         '''Destroys the tkinter window and call open_login function i.e. login function from a login page'''
         WIN.destroy()
-        from user_list import user_list
-        user_list()
+        from user_list import view_users
+        view_users()
     
     def remove_users_page():
         '''Destroys the tkinter window and call open_login function i.e. login function from a login page'''

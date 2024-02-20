@@ -2,8 +2,8 @@ from tkinter import *
 
 def return_adminhomepage(WIN):
     WIN.destroy()
-    from Dashboardstart import  admin_homepage
-    admin_homepage()
+    from startdashboard import dashboard
+    dashboard()
 
 # Created a function named adminlogin_validation
 def adminlogin_validation(username, password):
@@ -31,8 +31,8 @@ def adminlogin_validate(WIN,username_value, password_value):
         if str(username_value) == "admin" and str(password_value) == "admin":  # Modify the condition
             # Destroys the tkinter window and call open_profile function i.e. profile_view function from a profile page
             WIN.destroy()
-            from admin_dashboard import  admin_homepage
-            admin_homepage()
+            from admin_dashboard import homepage
+            homepage()
     else:
         adminlogin_data_error()
 

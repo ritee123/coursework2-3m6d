@@ -6,6 +6,12 @@ import re
 import requests
 from tkinter import ttk 
 
+def dashboard_call(WIN):
+    '''Destroys the tkinter window and call open function i.e. login function from a admin page'''
+    WIN.destroy()
+    from admin_dashboard import homepage
+    homepage()
+
 def is_valid_email(email):
     # Regular expression for validating an email
     pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
@@ -31,6 +37,12 @@ def addnewuser_validation(name_entry, citizenship_entry, phone_entry, address_en
         print("Validation passed")
         return True
     else:
+        print(len(name_entry.get()) != 0 and isinstance(name_entry.get(), str))
+        print(len(citizenship_entry.get()) != 0 and citizenship_entry.get().isdigit())
+        print(len(phone_entry.get()) == 10 and phone_entry.get().isdigit())
+        print(len(address_entry.get()) != 0 and isinstance(address_entry.get(), str))
+        print(len(account_type_entry.get()) != 0 and isinstance(account_type_entry.get(), str))
+        print(is_valid_email(email_entry.get()))
         print("Validation failed")
         return False
 
@@ -45,9 +57,10 @@ def send(account_number,PIN,phone):
                 'token': 'v2_Rri05e6U3XkCcnmjeOnfxdDzAqz.dY9a',
                 'from': 'TheAlert',
                 'to': to_phone,
-                'text': f'Dear User, welcome to Kuber! Your saving account number is {account_number} and your PIN is {PIN}. Please do not share your banking details with anyone.'
+                'text': f'Dear User, welcome to Kuber! Your PIN is {PIN}, and your saving account number is {account_number}. Please do not share your banking details with anyone.'
             }
         )
+        print("R: ", r)
         status_code = r.status_code
         response = r.text
         response_json = r.json()
@@ -65,12 +78,16 @@ def create_new_user(WIN, name_entry, citizenship_entry, phone_entry, address_ent
     account_number = random.randint(10000, 99999)
     PIN = random.randint(10000, 99999)
     
-
     if addnewuser_validation(name_entry, citizenship_entry, phone_entry, address_entry, email_entry, account_type_entry):
         image_path = "images/profileimg.png"
         print("Image Path:", image_path)  # Add this line to print the image path
-        decoded_data = lsb.reveal(image_path)
-        if decoded_data:
+        decoded_data = ""
+        try:
+            decoded_data = lsb.reveal(image_path)
+        except:
+            print("Image Reveal Not Success...")
+
+        if decoded_data != "":
             banking_system = json.loads(decoded_data)
         else:
             banking_system = {}
@@ -151,12 +168,12 @@ def return_adminhomepage(WIN):
 
  
 def add_new_user():
+    print("********************* Add New User Page *** Opens Here *********************")
     WIN = Tk()
     logo_image = PhotoImage(file="images/fish2.png")
     WIN.iconphoto(False, logo_image)
     WIN.title('Online Banking System')
     WIN.geometry('360x640')
-
    
     background = PhotoImage(file="images/adduser.png")
     label_background = Label(WIN, image=background, borderwidth=0)
@@ -164,79 +181,63 @@ def add_new_user():
     w = Canvas(WIN, width=280, height=4255, borderwidth=0, highlightthickness=0)
     w.create_rectangle(0, 0, 280, 500, fill="#9867C5", outline='#6E0042')
     w.pack(padx=30, pady=(170,3))
+    button_image = PhotoImage(file="images/arrow.png")
+    button = Button(WIN, image=button_image, borderwidth=0, width=30, height=30,command = lambda:dashboard_call(WIN))
+    button.place(x=4, y=5)
 
 
     def temp_name(e):
         name_entry.delete(0, "end")
 
-    #Entry Box to take name Input from user
+    # Entry Box to take name Input from user
     name_entry = Entry(WIN, font=("Comic Sans MS", 15), justify="center", width=18, foreground="#AFAFAF")
-    #Added Text in Entry Box
     name_entry.insert(0, "Full Name")
-    #Bind Entry so that when Clicked for Input it calls temp_name
     name_entry.bind("<FocusIn>",temp_name)
     name_entry.place(relx=0.5, rely=0.3, anchor=CENTER)
    
 
-    #Function named temp_citizenship with one parameter i.e. 'e'
     def temp_citizenship(e):
         '''Clears citizenship_entry to take user input'''
         citizenship_entry.delete(0, "end")
 
-    #Entry Box to take citizenship Input from user
     citizenship_entry = Entry(WIN, font=("Comic Sans MS", 15), justify="center", width=18, foreground="#AFAFAF")
-    #Added Text in Entry Box
     citizenship_entry.insert(1, "Citizenship Number")
-    #Bind Entry so that when Clicked for Input it calls temp_citizenship
     citizenship_entry.bind("<FocusIn>",temp_citizenship)
     citizenship_entry.place(relx=0.5, rely=0.4, anchor=CENTER)
 
-    #Function named temp_phone with one parameter i.e. 'e'
+
     def temp_phone(e):
         '''Clears phone_entry to take user input'''
         phone_entry.delete(0, "end")
 
-    #Entry Box to take phone Input from user
     phone_entry = Entry(WIN, font=("Comic Sans MS", 15), justify="center", width=18, foreground="#AFAFAF")
-    #Added Text in Entry Box
     phone_entry.insert(2, "Phone Number")
     phone_entry.bind("<FocusIn>",temp_phone)
-    #Bind Entry so that when Clicked for Input it calls temp_phone
     phone_entry.place(relx=0.5, rely=0.5, anchor=CENTER)
 
     
-    #Function named temp_address with one parameter i.e. 'e'
     def temp_address(e):
         '''Clears citizenship_entry to take user input'''
         address_entry.delete(0, "end")
 
-    #Entry Box to take address Input from user
     address_entry = Entry(WIN, font=("Comic Sans MS", 15), justify="center", width=18, foreground="#AFAFAF")
-    #Added Text in Entry Box
     address_entry.insert(3, "Address")
-    #Bind Entry so that when Clicked for Input it calls temp_address
     address_entry.bind("<FocusIn>",temp_address)
     address_entry.place(relx=0.5, rely=0.6, anchor=CENTER)
     
-
-
-    #Function named temp_dob with one parameter i.e. 'e'
     def temp_email(e):
         '''Clears DOB entry to take user input'''
         email_entry.delete(0, "end")
 
-    #Entry Box to take DOB Input from user
+
     email_entry = Entry(WIN, font=("Comic Sans MS", 15), justify="center", width=18, foreground="#AFAFAF")
-    #Added Text in Entry Box
     email_entry.insert(4, "Email")
-    #Bind Entry so that when Clicked for Input it calls temp_DOB
     email_entry.bind("<FocusIn>",temp_email)
     email_entry.place(relx=0.5, rely=0.7, anchor=CENTER)
 
     def temp_account_type(e):
         '''Clears account_type_entry to take user input'''
         account_type_entry.delete(0, "end")
-     
 
     # Define the options for account type
     account_types = ['Saving Account', 'Checking Account']  # Add more account types as needed
@@ -245,13 +246,7 @@ def add_new_user():
 
     account_type_entry.place(relx=0.5, rely=0.8, anchor=CENTER)  
     
-
-
-
-
-   
-
-   # created a add_new_voter Button which calls add_new_voter_page function when pressed
+    # created a add_new_voter Button which calls add_new_voter_page function when pressed
     add_new_user_button = Button(WIN,text="Add User",padx=13,borderwidth=0,
                                  font=("Comic Sans MS", 14),background= '#645394', 
                                  foreground= 'white',
@@ -260,26 +255,18 @@ def add_new_user():
                                                                 email_entry, account_type_entry))
     add_new_user_button.place(relx=0.5, rely=0.9, anchor=CENTER)
 
- # Created a Function named on_enter_add_new_voter_button with 'e' as one parameter
     def on_enter_add_new_user_button(e):
         '''Changed Background and Foreground of add_new_voter Button named add_new_voter_button
         to #ABBC41 and white respectively when function is called.'''
         add_new_user_button.config(background='#7409EB',foreground= "white")
 
-    # Created a Function named on_leave_add_new_voter_button with 'e' as one parameter
     def on_leave_add_new_user_button(e):
-        '''Changed Background and Foreground of add_new_voter Button named add_new_voter_button to
-        pink and black respectively when function is called.'''
         add_new_user_button.config(background= '#645394', foreground= 'white')
-
-    #Created a Bind i.e. When Entered inside a add_new_voter button calls on_enter_add_new_voter_button function
-    #and when leaves the add_new_voter button calls on_leave_add_new_voter_button function
     add_new_user_button.bind('<Enter>',on_enter_add_new_user_button)
     add_new_user_button.bind('<Leave>',on_leave_add_new_user_button)
     
-    
-    #places all GUI into Tkinter Window
+    # places all GUI into Tkinter Window
     WIN.mainloop()
 
-#calls add_new_voter function to execute
+
 add_new_user()

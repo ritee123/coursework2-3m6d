@@ -16,11 +16,11 @@ def data_not_found():
 
 def return_adminhomepage(WIN):
     WIN.destroy()
-    from admin_dashboard import admin_homepage
-    admin_homepage()
+    from admin_dashboard import homepage
+    homepage()
 
 
-def viewuser():
+def viewusers():
     '''Created a Tkinter Window named WIN_viewvoter and placed logo_image as icon photo.
     Similarly,Adding Title to the window and Providing Geometry to the window.'''
     WIN_viewvuser = Tk()
@@ -45,7 +45,7 @@ def viewuser():
     # Configured Properties of Tree View
     ttk.Style().configure("Treeview", background="#645394", foreground="white", fieldbackground="#645394",
                           rowheight=31, font=("Comic Sans MS", 12), highlightthickness=0, bd=0, padding=10, columns=1)
-    ttk.Style().map("Treeview", background=[('selected', '#645394')], foreground=[('selected', 'white')])
+    ttk.Style().map("Treeview", background=[('selected', '#115394')], foreground=[('selected', 'white')])
     tv['columns'] = ('Name', 'Age')
     tv.column('#0', width=0, stretch=NO)
     tv.column('Name', anchor=W, width=140)
@@ -84,24 +84,18 @@ def viewuser():
             # Calls data_not_found
             data_not_found()
 
-    def remove_user():
-        # Get the selected item from the TreeView
-        selected_item = tv.selection()
-        if selected_item:
-            # Get the index of the selected item
-            index = int(selected_item[0])
-            
-            # Remove the selected user from orginal_userlist and tv
-            del orginal_userlist[index]
-            tv.delete(selected_item)
-            
-            # Update userlist to match orginal_userlist
-            userlist.clear()
-            userlist.extend(orginal_userlist)
-            
-        else:
-            messagebox.showinfo("Error", "Please select a user to remove.")
-
+    def show_user_details(event):
+    # Get the selected item
+     selected_item = tv.selection()
+     if selected_item:
+        # Get the user data based on the selection
+        user_data = orginal_userlist[int(selected_item[0]) - 1]  # Adjusting index for Treeview
+        
+        # Format the user data
+        details = f"Name: {user_data[0]}\nAddress: {user_data[3]}\nCitizenship Number: {user_data[1]}\nPhone Number: {user_data[2]}\nAccount Created: {user_data[4]}"
+        
+        # Show user details in a message box
+        messagebox.showinfo("User Details", details)
     username_search = Entry(WIN_viewvuser, font=("Comic Sans MS", 11), justify="center", width=15, foreground="#AFAFAF")
     username_search.place(relx=0.4, rely=0.4, anchor=CENTER)
 
@@ -122,7 +116,8 @@ def viewuser():
     decoded_data = json.loads(decoded_data)
 
     # Created voterlist as blank list
-    detailedlist = decoded_data['Voter']
+    detailedlist = decoded_data['users']
+    print("User Remove Detailed List:", detailedlist)
 
     userlist = []
     # for loop to go through every value of detailedlist
@@ -148,6 +143,8 @@ def viewuser():
     for data in userlist:
         tv.insert(parent='', index=a, iid=a, text='', values=data)
         a = a + 1
+
+
     tv.place(relx=0.5, rely=0.7, anchor=CENTER)
 
     # Load the image (ensure the image is in the same directory as your script or provide a full path)
@@ -157,13 +154,11 @@ def viewuser():
     return_button.image = return_image
     return_button.place(x=4, y=5)
 
-    remove_button = Button(WIN_viewvuser, text="Remove", padx=9, borderwidth=0, font=("Comic Sans MS", 9),
-                           background='#d98d0b', foreground='black', command=remove_user)
-    remove_button.place(relx=0.5, rely=0.9, anchor=CENTER)
+    tv.bind("<Double-1>", show_user_details)
 
     # Places all GUI of Tkinter Window into it.
     WIN_viewvuser.mainloop()
 
 
 # Calls viewvoter Function
-viewuser()
+viewusers()
