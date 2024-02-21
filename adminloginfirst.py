@@ -4,12 +4,7 @@ def return_adminhomepage(WIN):
     WIN.destroy()
     from startdashboard import dashboard
     dashboard()
-
-# Created a function named adminlogin_validation
-def adminlogin_validation(username, password):
-    return len(username) != 0 and username != "User Name" and len(password) != 0 and password != "Password"
-
-#Created Function namedadminlogin_error
+    
 def adminlogin_data_error():
 
     title = "Error"
@@ -17,10 +12,12 @@ def adminlogin_data_error():
     from errors import error as show_error
     show_error(title,message)
     
+
+def adminlogin_validation(username, password):
+    return len(username) != 0 and username != "User Name" and len(password) != 0 and password != "Password"
+
 def dashboard_call(WIN):
     '''Destroys the tkinter window and call open function i.e. login function from a admin page'''
-
-
 
 def adminlogin_validate(WIN,username_value, password_value):
     record = []  
@@ -30,7 +27,7 @@ def adminlogin_validate(WIN,username_value, password_value):
             from admin_dashboard import homepage
             homepage()
     else:
-        adminlogin_data_error()
+        adminlogin_data_error() 
 
 
 
