@@ -40,8 +40,6 @@ def dashboard():
                                  background='#645394', foreground= 'white',command=admin_page)
     admin_login_button.place(relx=0.5, rely=0.7, anchor=CENTER)
 
-    #Created a Bind i.e. When Entered inside a Login button calls on_enter_admin_login function
-    #and when leaves the Login button calls on_leave_admin_login function
     admin_login_button.bind('<Enter>',on_enter_admin_login)
     admin_login_button.bind('<Leave>',on_leave_admin_login)
 
@@ -60,8 +58,6 @@ def dashboard():
                                  foreground= 'white',command=user_page)
     user_login_button.place(relx=0.5, rely=0.8, anchor=CENTER)
 
-    #Created a Bind i.e. When Entered inside a Register button calls on_enter_user_login function
-    #and when leaves the Register button calls on_leave_user_login function
     user_login_button.bind('<Enter>',on_enter_user_login)
     user_login_button.bind('<Leave>',on_leave_user_login)
 

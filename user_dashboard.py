@@ -48,7 +48,7 @@ def homepage():
     def remove_users_page():
         '''Destroys the tkinter window and call open_login function i.e. login function from a login page'''
         WIN.destroy()
-        from removeusers import viewusers
+        from userdetail import viewusers
         viewusers()
 
 

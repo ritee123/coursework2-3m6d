@@ -52,9 +52,9 @@ def homepage():
         from user_list import view_users
         view_users()
     
-    def remove_users_page():
+    def detail_users_page():
          WIN.destroy()
-         from removeusers import viewusers
+         from userdetail import viewusers
          viewusers()
 
 
@@ -71,17 +71,17 @@ def homepage():
     add_user.bind('<Enter>',on_enter_add_user)
     add_user.bind('<Leave>',on_leave_add_user)
 
-    def on_enter_remove_users(e):
-        remove_users.config(background='#7409EB',foreground= "white")
+    def on_enter_detail_users(e):
+        detail_users.config(background='#7409EB',foreground= "white")
 
     # Created a Function named on_leave_view_voter with 'e' as one parameter
-    def on_leave_remove_users(e):
-        remove_users.config(background= '#645394', foreground= 'white')
+    def on_leave_detail_users(e):
+        detail_users.config(background= '#645394', foreground= 'white')
 
-    remove_users= Button(WIN,text="Remove users",padx=13,borderwidth=0,font=("Comic Sans MS", 12),background= '#645394', foreground= 'white',command=lambda:remove_users_page())
-    remove_users.place(relx=0.7, rely=0.5, anchor=CENTER)
-    remove_users.bind('<Enter>',on_enter_remove_users)
-    remove_users.bind('<Leave>',on_leave_remove_users)
+    detail_users= Button(WIN,text="User Detail",padx=13,borderwidth=0,font=("Comic Sans MS", 12),background= '#645394', foreground= 'white',command=lambda:detail_users_page())
+    detail_users.place(relx=0.7, rely=0.5, anchor=CENTER)
+    detail_users.bind('<Enter>',on_enter_detail_users)
+    detail_users.bind('<Leave>',on_leave_detail_users)
 
 
 
