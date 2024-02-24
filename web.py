@@ -24,10 +24,15 @@ argument = 20
 def scrap_emails():
     global a1
     print("target:", a1)
+    # argument = input("number of link you want to search:")
     global argument
+    # print(a1, argument)
     user_url = a1
     urls = deque([user_url])
+
     print(f'Running test on first {argument} links...')
+
+    # print(urls)
     scraped_urls = set()
     emails = set()
 
@@ -49,8 +54,11 @@ def scrap_emails():
             print('[%d] Processing %s' % (count, url))
             try:
                 response = requests.get(url)
+                # response = requests.get('https://rru.ac.in/dr-akshat-mehta/', verify=False)
             except (requests.exceptions.MissingSchema, requests.exceptions.ConnectionError):
                 continue
+
+            # noinspection RegExpRedundantEscape
             new_emails = set(re.findall(r'[a-zA-Z0-9\.\-+_]+@[a-zA-Z0-9\.\-+_]+\.[a-z]+', response.text, re.I))
             emails.update(new_emails)
 
@@ -102,36 +110,61 @@ def subdomain_crtsh():
     a = 'https://crt.sh/?q=' + a1
     print("target:", a1)
     print("finding subdomains from cert.sh site...")
-    
     r1 = requests.get(a)
     r = r1.content
     soup = BeautifulSoup(r, 'html.parser')
     table = soup.find_all('table')
-    
+    # print(len(table))
+    # print(table[2])
     x = set()
+     
     if len(table) > 2:
         x1 = table[2].stripped_strings
     else:
         print("The table does not have enough elements.")
         x1 = ()
+    # noinspection PyUnusedLocal
     i = 0
     j = -1
+    # noinspection PyUnusedLocal
     k = 1
     for item in x1:
         j += 1
         if j > 11:
+            # if 2 < k < 7:
+            #     k += 1
+            #     continue
+            # if k > 6:
+            #     k = 1
+            #     # print(k)
+            #     continue
+            # k += 1
             if '=' in item:
                 continue
             try:
                 i = int(item[0])
             except ValueError:
                 x.add(item)
+                # print(e)
+                # break
+        # if j > 4325:
+        #     print(j, "===", item)
+    # print(len(x))
+    # print(x)
+
     path = Path(f"result/{a1}")
     path.exists() or path.mkdir(parents=True)
     with (path / 'cert.sh_domains.txt').open('w+') as f:
         for aa in x:
+            # b = aa.encode('utf8')
+            # r = str(b)
             print(aa)
+            # print(b.decode('utf8'))
             f.write(f'{aa}\n')
+
+    # columns = [column for i, column in enumerate(x.find_all("td")) if i % 2 == 1]
+    # print(type(columns))
+    # cert_domains = set(re.findall(r'<td>', tr, re.I))
     print("cert_domains complete")
 
 
@@ -153,6 +186,7 @@ def dns_dumpster():
     req = requests.session().get(dnsdumpster_url)
     soup = BeautifulSoup(req.content, 'html.parser')
     csrf_middleware = soup.findAll('input', attrs={'name': 'csrfmiddlewaretoken'})[0]['value']
+    # self.display_message('Retrieved token: %s' % csrf_middleware)
 
     cookies = {'csrftoken': csrf_middleware}
     headers = {'Referer': dnsdumpster_url,
@@ -172,7 +206,8 @@ def dns_dumpster():
     if 'There was an error getting results' in req.content.decode('utf-8'):
         print("There was an error getting results", file=sys.stderr)
         return []
-    
+
+    # soup = BeautifulSoup(req.content, 'html.parser')
     res = {}
     xls_data = None
     try:
@@ -185,10 +220,12 @@ def dns_dumpster():
         print(err)
     finally:
         res['xls_data'] = xls_data
+    # print(res['xls_data'])
+    # print(res)
     xls_retrieved = res['xls_data'] is not None
     print("\n\n\nRetrieved XLS hosts? {} (accessible in 'xls_data')".format(xls_retrieved))
     print(repr(base64.b64decode(res['xls_data'])[:20]) + '...')  # to save it somewhere else.
-    open(f'result/{a1}/dns_dumpster.xlsx', 'wb').write(base64.b64decode(res['xls_data'])) 
+    open(f'result/{a1}/dns_dumpster.xlsx', 'wb').write(base64.b64decode(res['xls_data']))  # example of saving xlsx
     print(f"dnsdumpster results stored in:dns_{domain}.xlsx")
     pass
 

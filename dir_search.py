@@ -34,6 +34,11 @@ def fill_lines():
 
 
 def dir_search_check(m_url):
+    # with open("D:/html/directory-list-lowercase-2.3-small.txt") as f1:
+    #     lines = f1.readlines()
+    # for line in lines:
+    #     # line.strip()
+    #     m_url = url + line.strip() + "/"
     try:
         r = requests.get(m_url)
         if not 399 < r.status_code < 500:
@@ -45,6 +50,10 @@ def dir_search_check(m_url):
     except Exception as e:
         # print(e)
         pass
+
+# check all directories from queue
+
+
 def worker():
     try:
         while not q.empty():
@@ -53,14 +62,17 @@ def worker():
     except KeyboardInterrupt:
         print(Fore.YELLOW, 'KeyboardInterrupt Exiting...')
 
+# save results to file
+
+
 
 def write_dir_results():
-    a1 = a1.replace("http://", "").replace("www.", "").replace("https://", "")
+    a2 = url.replace("http://", "").replace("www.", "").replace("https://", "")
 
     # Remove invalid characters from the target
     invalid_chars = ['/', '\\', ':', '*', '?', '"', '<', '>', '|']
     for char in invalid_chars:
-        a1 = a1.replace(char, '_')
+        a1 = a2.replace(char, '_')
         
     results = open(f"result/{a1}/dirs.txt", 'a')
     for i in d1:
